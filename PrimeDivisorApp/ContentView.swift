@@ -9,24 +9,23 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var inputText: String = ""
-    @State private var listNumbers: [Int] = []
     @State private var showCount: String = ""
+    @State private var listNumbers: [Int] = []
     @State private var isShowingAlert: Bool = false
 
     var body: some View {
         VStack {
-            TextField("１以上の整数を入力してください", text: $inputText)
+            TextField("２以上の整数を入力してください", text: $inputText)
                 .padding()
             HStack {
                 Button {
                     if let castedNumber = canVastToIntType(inputText: inputText) {
                         listNumbers = findPrimeNumbers(numberToCheck: castedNumber)
+                        showCount = "\(inputText) の素数は、\(listNumbers.count)個です"
                     } else {
-                        isShowingAlert.toggle()
+                        cannotCastInt()
                     }
                     inputText = ""
-                    showCount = "素数"
-                    print("素数ボタンがタップされた")
                 } label: {
                     Text("素数チェック")
                 }
@@ -34,45 +33,34 @@ struct ContentView: View {
                 Button {
                     if let castedNumber = canVastToIntType(inputText: inputText) {
                         listNumbers = findDivisors(numberToCheck: castedNumber)
+                        showCount = "\(inputText) の素数は、\(listNumbers.count + 1)個です"
                     } else {
-                        isShowingAlert.toggle()
+                        cannotCastInt()
                     }
                     inputText = ""
-                    showCount = "約数"
-                    print("約数ボタンがタップされた")
                 } label: {
                     Text("約数チェック")
                 }
                 .buttonStyle(.borderedProminent)
             }
-            Text("\(inputText) の \(showCount) は、\(listNumbers.count + 1) 個です")
+            isShowingAlert ? Text("") : Text("\(showCount)")
             List(listNumbers, id: \.self) { number in
                 Text("\(number)")
             }
-        }// VStack
-        .alert("１以上の整数を入力してください", isPresented: $isShowingAlert) {
+        }
+        .alert("２以上の整数を入力してください", isPresented: $isShowingAlert) {
+
             Button("OK") { }
         }
     }
 
     func canVastToIntType(inputText: String) -> Int? {
         if let intNumber = Int(inputText) {
-            if intNumber >= 1 {
+            if intNumber > 1 {
                 return intNumber
             }
         }
         return nil
-    }
-
-    func findDivisors(numberToCheck: Int) -> [Int] {
-        var divisors: [Int] = []
-        for number in 1 ... numberToCheck {
-            // 割り切れたら追加
-            if numberToCheck % number == 0 {
-                divisors.append(number)
-            }
-        }
-        return divisors
     }
 
     func findPrimeNumbers(numberToCheck: Int) -> [Int] {
@@ -93,6 +81,23 @@ struct ContentView: View {
             }
         }
         return primeNumbers
+    }
+
+    func findDivisors(numberToCheck: Int) -> [Int] {
+        var divisors: [Int] = []
+        for number in 1 ... numberToCheck {
+            // 割り切れたら追加
+            if numberToCheck % number == 0 {
+                divisors.append(number)
+            }
+        }
+        return divisors
+    }
+
+    func cannotCastInt() {
+        showCount = ""
+        listNumbers = []
+        isShowingAlert.toggle()
     }
 }
 
