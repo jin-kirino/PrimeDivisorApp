@@ -45,7 +45,7 @@ struct ContentView: View {
                 Button {
                     if let castedNumber = canVastToIntType(inputText: inputText) {
                         listNumbers = findDivisors(numberToCheck: castedNumber)
-                        showCount = "\(inputText) の素数は、\(listNumbers.count)個です"
+                        showCount = "\(inputText) の約数は、\(listNumbers.count)個です"
                     } else {
                         cannotCastInt()
                     }
@@ -77,17 +77,13 @@ struct ContentView: View {
 
     func findPrimeNumbers(numberToCheck: Int) -> [Int] {
         var primeNumbers: [Int] = []
-        // 1~入力値
         for number in 1 ... numberToCheck {
             var count: Int = 0
-            // 1~自分自身で割る
             for divisor in 1 ... number {
-                // 割り切れたら＋１
                 if number % divisor == 0 {
                     count += 1
                 }
             }
-            // 割り切れる回数が１と自分自身の２回
             if count == 2 {
                 primeNumbers.append(number)
             }
@@ -98,7 +94,6 @@ struct ContentView: View {
     func findDivisors(numberToCheck: Int) -> [Int] {
         var divisors: [Int] = []
         for number in 1 ... numberToCheck {
-            // 割り切れたら追加
             if numberToCheck % number == 0 {
                 divisors.append(number)
             }
