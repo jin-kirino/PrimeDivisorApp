@@ -12,11 +12,23 @@ struct ContentView: View {
     @State private var showCount: String = ""
     @State private var listNumbers: [Int] = []
     @State private var isShowingAlert: Bool = false
+    @State private var editting: Bool = false
 
     var body: some View {
         VStack {
-            TextField("２以上の整数を入力してください", text: $inputText)
+            TextField("２以上の整数を入力してください", text: $inputText,
+                      onEditingChanged: { begin in
+                        if begin {
+                            self.editting = true
+                            self.inputText = ""
+                        } else {
+                            self.editting = false
+                        }
+                      })
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .keyboardType(.numberPad)
                 .padding()
+                .shadow(color: editting ? .blue : .clear, radius: 3)
             HStack {
                 Button {
                     if let castedNumber = canVastToIntType(inputText: inputText) {
