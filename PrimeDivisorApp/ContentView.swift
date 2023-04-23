@@ -45,7 +45,7 @@ struct ContentView: View {
                 Button {
                     if let castedNumber = canVastToIntType(inputText: inputText) {
                         listNumbers = findDivisors(numberToCheck: castedNumber)
-                        showCount = "\(inputText) の素数は、\(listNumbers.count + 1)個です"
+                        showCount = "\(inputText) の素数は、\(listNumbers.count)個です"
                     } else {
                         cannotCastInt()
                     }
