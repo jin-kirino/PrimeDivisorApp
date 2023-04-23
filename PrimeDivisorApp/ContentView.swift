@@ -76,15 +76,20 @@ struct ContentView: View {
     }
 
     func findPrimeNumbers(numberToCheck: Int) -> [Int] {
-        var primeNumbers: [Int] = []
-        for number in 1 ... numberToCheck {
-            var count: Int = 0
-            for divisor in 1 ... number {
+        guard numberToCheck > 1 else {
+            return []
+        }
+        var primeNumbers: [Int] = [2]
+        for number in stride(from: 3, through: numberToCheck, by: 2) {
+            var isPrime = true
+            let maxDivisor = Int(sqrt(Double(number)))
+            for divisor in stride(from: 3, through: maxDivisor, by: 2) {
                 if number % divisor == 0 {
-                    count += 1
+                    isPrime = false
+                    break
                 }
             }
-            if count == 2 {
+            if isPrime {
                 primeNumbers.append(number)
             }
         }
